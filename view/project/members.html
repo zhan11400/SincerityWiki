@@ -1,0 +1,85 @@
+
+<extend  name="member"/>
+<block name="title">{$project->project_name}用户列表</block>
+<block name="scripts">
+<script type="text/javascript">
+    function showError($msg) {
+        $("#error-message").addClass("error-message").removeClass("success-message").text($msg);
+        return false;
+    }
+    function showSuccess($msg) {
+        $("#error-message").addClass("success-message").removeClass("error-message").text($msg);
+        return true;
+    }
+
+    $(function () {
+        var addBtn = $("#add-member-btn");
+
+        $("#form-member").ajaxForm({
+            dataType : "json",
+            beforeSubmit : function () {
+                var account = $.trim($("#account").val());
+                if(!account){
+                    return showError('请输入账号');
+                }
+                addBtn.button('loading')
+            } ,
+            success : function (res) {
+                if(res.code == 0){
+                    showSuccess(res.msg);
+                    $("#form-member").after(res.data.html);
+                }else{
+                    showError(res.msg);
+                }
+                addBtn.button('reset');
+            },
+            error :function () {
+                showError('服务器错误');
+                addBtn.button('reset');
+            }
+        });
+
+        $(".delete-btn").on('click',function () {
+            var $then = $(this);
+            var account = $(this).attr("data-id");
+            if(!account){
+                alert("参数错误");
+            }else{
+                var $btn = $(this).button('loading');
+                $.post("{:url('project/addMember',['id'=>$project->project_id])}",{"type":"delete","account":account})
+                    .done(function (res) {
+                        $btn.button('reset');
+                        $then.parents('.user-item').remove().empty();
+                    }).fail(function () {
+                    $btn.button('reset');
+                    alert("处理失败");
+                });
+            }
+        });
+    });
+</script>
+</block>
+<block name="content">
+<div class="project-box">
+    <div class="box-head">
+        <h4>{$project->project_name} - 用户列表</h4>
+    </div>
+    <div class="box-body">
+        <div class="user-list">
+            <form role="form" method="post" class="form-inline" action="{:url('project/addMember',['id'=>$project->project_id])}" id="form-member">
+                <input type="hidden" name="project_id" value="{$project->project_id}">
+                <input type="hidden" name="type" value="add">
+                <div class="form-group">
+                    <input type="text" name="account" id="account" placeholder="账号" class="form-control">
+                    <button class="btn btn-success" data-loading-text="添加中..." id="add-member-btn"> 添加</button>
+                    <span id="error-message"></span>
+                </div>
+            </form>
+            <volist name="users" id="item">
+                <include file="widget/project_member"/>
+            </volist>
+        </div>
+
+    </div>
+</div>
+</block>

@@ -1,0 +1,123 @@
+<extend name='main'/>
+<block name='title'>用户登陆-{$config['SITE_NAME']}</block>
+<block name="content">
+<div class="container smart-container">
+    <div class="row login">
+        <div class="login-body">
+            <form role="form" method="post">
+                <h3 class="text-center">用户登录</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <input type="text" class="form-control" placeholder="用户名" name="account" id="account" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-lock"></i>
+                        </div>
+                        <input type="password" class="form-control" placeholder="密码" name="password" id="passwd" autocomplete="off">
+                    </div>
+                </div>
+                <eq name="config.ENABLED_CAPTCHA" value="1">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-check-square"></i>
+                        </div>
+                        <input type="text" name="code" id="code" class="form-control" style="width: 120px" maxlength="5" placeholder="验证码" autocomplete="off">&nbsp;
+                        <img id="captcha-img" height="32"  src="{:captcha_src()}" onclick="this.src='{:captcha_src()}?key=login&t='+(new Date()).getTime();" title="点击换一张">
+                    </div>
+                </div>
+                </eq>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="is_remember"> 保持登录
+                    </label>
+                    <a href="{:url('account/findPassword')}" style="display: inline-block;float: right">忘记密码？</a>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="btn-login" class="btn btn-success" style="width: 100%"  data-loading-text="正在登录..." autocomplete="off">立即登录</button>
+                </div>
+                <eq name="config.ENABLED_REGISTER" value="1">
+                <div class="form-group">
+                    还没有账号？<a href="{:url("account/register")}">立即注册</a>
+                </div>
+                </eq>
+            </form>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+</block>
+<block name="scripts">
+<script type="text/javascript">
+    $(function () {
+        $("#account,#passwd,#code").on('focus',function () {
+            $(this).tooltip('destroy').parents('.form-group').removeClass('has-error');;
+        });
+
+        $(document).keydown(function (e) {
+            var event = document.all ? window.event : e;
+            if(event.keyCode === 13){
+                $("#btn-login").click();
+            }
+        });
+        $("#btn-login").on('click',function () {
+            var $btn = $(this).button('loading');
+            var account = $.trim($("#account").val());
+            var passwd = $.trim($("#passwd").val());
+            var code = $("#code").val();
+            if(account === ""){
+                $("#account").tooltip({placement:"auto",title : "账号不能为空",trigger : 'manual'})
+                    .tooltip('show')
+                    .parents('.form-group').addClass('has-error');
+                $btn.button('reset');
+                return false;
+
+            }else if(passwd === ""){
+                $("#passwd").tooltip({title : '密码不能为空',trigger : 'manual'})
+                    .tooltip('show')
+                    .parents('.form-group').addClass('has-error');
+                $btn.button('reset');
+                return false;
+            }else if(code !== undefined && code === ""){
+                $("#code").tooltip({title : '验证码不能为空',trigger : 'manual'})
+                    .tooltip('show')
+                    .parents('.form-group').addClass('has-error');
+                $btn.button('reset');
+                return false;
+            }else{
+                $.ajax({
+                    url : "{:url('account/login')}",
+                    data : $("form").serializeArray(),
+                    dataType : "json",
+                    type : "POST",
+                    success : function (res) {
+
+                        if(res.code != 20001){
+                            $("#captcha-img").click();
+                            $("#code").val('');
+                            layer.msg(res.msg);
+                            $btn.button('reset');
+                        }else{
+                            window.location = "/";
+                        }
+
+                    },
+                    error :function () {
+                        $("#captcha-img").click();
+                        $("#code").val('');
+                        layer.msg('系统错误');
+                        $btn.button('reset');
+                    }
+                });
+            }
+            return false;
+        });
+    });
+</script>
+</block>

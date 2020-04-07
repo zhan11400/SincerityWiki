@@ -1,0 +1,90 @@
+@extends('home')
+<extend name='main'/>
+<block name="title">{$project->project_name}</block>
+
+<block name="content">
+<div class="container smart-container manual-project">
+    <div class="manual-project-box">
+        <div class="pull-left">
+            <div class="manual-project-box-img">
+                <img src="/static/images/project_default.png" width="50">
+            </div>
+            <div class="manual-project-box-title">
+                {$title}
+            </div>
+            <div class="author">
+                <img src="{$author_headimgurl}" width="30" class="img-circle"> <span class="author-name">{$author}</span>
+                <php> if(empty($project->modify_time)=== false){ </php>
+                <span class="modify-time">最后更新时间 {$project->modify_time}</span>
+                <php> }elseif(empty($project->create_time) === false){ </php>
+                <span class="modify-time">最后更新时间 {$project->create_time}</span>
+                <php>}</php>
+            </div>
+            <div class="manual-action">
+                <if empty($first_document)>
+                <a href="javascript:;" class="btn btn-warning">暂未发布文档</a>
+                <else/>
+                <a href="{:url('index/show',['id' => $project->project_id])}" class="btn btn-success">阅读</a>
+                </if>
+            </div>
+        </div>
+        <div class="pull-right hidden-xs">
+            <div class="manual-project-box-qrcode">
+                <div id="qrcode"></div>
+                <div class="text-center" style="margin-top: 20px">扫一扫用手机阅读</div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="manual-project-body">
+        <div class="tab-head">
+            <a href="javascript:;" class="tab-item active" data-target="#tab-description">概要</a>
+            <a href="javascript:;" class="tab-item" data-target="#tab-catalog">目录</a>
+            <php>if(empty($records) === false)</php>
+            <a href="javascript:;" class="tab-item" data-target="#tab-records">更新记录</a>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="tab-content">
+            <div class="tab-item active" id="tab-description">
+                {$body}
+            </div>
+            <div class="tab-item" id="tab-catalog">
+                {$tree|raw}
+            </div>
+            <if !empty($records)>
+            <div class="tab-item" id="tab-records">
+
+            </div>
+            </if>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+</block>
+
+<block name="modelDialog"></block>
+<block name="scripts">
+ <script src="/static/scripts/qrcode.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var qrcode = new QRCode('qrcode', {
+        text: window.location.href,
+        width: 100,
+        height: 100,
+        colorDark : '#5cb85c',
+        colorLight : '#ffffff',
+        correctLevel : QRCode.CorrectLevel.H
+    });
+    $(function () {
+        $(".tab-head>.tab-item").on('click',function () {
+            $(this).closest('.tab-head').children('.tab-item').removeClass('active');
+            $(this).addClass('active');
+            $(".tab-content>.tab-item").removeClass('active');
+            var target = $(this).attr('data-target');
+            $(target).addClass('active');
+        }) ;
+    });
+
+</script>
+</block>

@@ -1,0 +1,14 @@
+<li>
+    <a href="{:url('index/manual',array('id'=>$item['project_id']))}" class="box" title="" target="_blank">
+        <div class="pull-left imgbox">
+            <i class="fa fa-desktop"></i>
+        </div>
+        <h4>{$item->project_name}</h4>
+        <span>共{$item->doc_count}个文档</span>
+    </a>
+    <p class="summary hidden-xs hidden-sm hidden-md">
+        <a href="{:url('index/manual',array('id'=>$item['project_id']))}" class="text" target="_blank">
+            {$item->description}
+        </a>
+    </p>
+</li>
