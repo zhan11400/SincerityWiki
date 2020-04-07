@@ -1,12 +1,20 @@
 # SincerityWiki
 基于TP6开发的一款针对IT团队开发的简单好用的文档管理系统
 可以用来储存日常接口文档，数据库字典，手册说明等文档。内置项目管理，用户管理，权限管理等功能，能够满足大部分中小团队的文档管理需求。
+## 要求
+PHP >= 7.1.0
+
+thinkPHP >= 6.0.2
+
+Fileinfo PHP拓展
+
+OpenSSL PHP拓展
 ## 安装与部署
 1，从GitHub下载源码后，执行composer下载vendor
 ```
  composer install
 ```
-2，修改站点根目录的.env配置文件
+2，修改站点根目录的.env配置文件，如果没有该文件，复制.example.env文件
 
 3,执行创建数据库操作(如果是root就执行以下指令，不是root就手动创建跟配置文件设置一样的数据库)
 ```
@@ -14,7 +22,7 @@
 ```
 4，数据表迁移
 ```
-php think magrate:run
+php think migrate:run
 ```
 5，数据填充
 ```
