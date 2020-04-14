@@ -18,14 +18,6 @@ class Account extends Common
      * @throws \think\db\exception\ModelNotFoundException
      */
     public function login(){
-        //DIRECTORY_SEPARATOR
-        $envPath = root_path() . '.env1';
-        if(!file_exists($envPath)){
-            @copy(root_path()  . '.example.env', root_path()  . '.env1');
-        }
-        exit;
-
-
         if(request()->isPost()) {
             $post=input();
             if ($this->config['ENABLED_CAPTCHA'] && empty($post['code'])){

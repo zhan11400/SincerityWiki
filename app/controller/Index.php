@@ -9,6 +9,7 @@ use app\model\Member;
 use app\model\Project;
 use app\middleware\Authenticate;
 use app\middleware\Install;
+use MongoDB\Driver\Manager;
 use think\facade\App;
 use function GuzzleHttp\Psr7\_caseless_remove;
 
