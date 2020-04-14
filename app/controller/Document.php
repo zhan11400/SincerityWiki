@@ -19,7 +19,6 @@ class Document extends Common
         }
 
         $doc = DocumentModel::getDocumentFromCache($doc_id);
-
         if(empty($doc) ){
             abort(404);
         }
@@ -47,8 +46,8 @@ class Document extends Common
         }
 
         $this->data['project'] = Project::getProjectFromCache($doc->project_id);
-
-        $this->data['tree'] = Project::getProjectHtmlTree($doc->project_id,$doc->doc_id);
+        $keywords=input('keywords');
+        $this->data['tree'] = Project::getProjectHtmlTree($doc->project_id,$doc->doc_id,$keywords);
         $this->data['title'] = $doc->doc_name;
 
         if(empty($doc->doc_content) === false){

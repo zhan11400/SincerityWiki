@@ -41,6 +41,7 @@ class Document extends Migrator
             ->addColumn('doc_content', 'text',array('limit'  =>0,'default'=>null,'null'=>true,'comment'=>'文档内容'))
             ->addColumn('create_at', 'integer',array('limit'  =>11,'default'=>0,'comment'=>'创建人'))
             ->addColumn('modify_at', 'integer',array('limit'  =>11,'default'=>0,'comment'=>'修改人'))
+            ->addColumn('modify_time', 'integer',array('limit'  =>0,'default'=>null,'comment'=>'修改时间'))
             ->addColumn('version', 'datetime',array('limit'  =>0,'default'=>null,'null'=>true,'comment'=>'当前时间'))
             ->addColumn('create_time', 'datetime',array('limit'  =>0,'default'=>null,'null'=>true,'comment'=>'创建时间'))
             ->addIndex(array('doc_id'), array('unique'  =>  true))

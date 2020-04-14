@@ -39,6 +39,7 @@
             </div>
             <div class="navbar-header pull-right manual-menu">
                 <div class="dropdown">
+
                     <button id="dLabel" class="btn btn-default" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         项目
                         <span class="caret"></span>
@@ -56,15 +57,20 @@
             </div>
         </div>
     </header>
+
+
+
     <article class="container-fluid manual-body">
         <div class="manual-left">
             <div class="manual-tab">
+
                 <div class="tab-navg">
                     <span data-mode="view" class="navg-item active"><i class="fa fa-align-justify"></i><b class="text">目录</b></span>
-                <!--    <span data-mode="search" class="navg-item"><i class="icon icon-search"></i><b class="text">搜索</b></span>
-                    <span data-mode="collect" class="navg-item"><i class="icon icon-heart"></i><b class="text">收藏</b></span>-->
+                    <span data-mode="search" class="navg-item" title="删除项目" data-toggle="modal" data-target="#projectTransfer"> <i class="icon icon-search"></i><b class="text">搜索</b></span>
+                   <!--<span data-mode="collect" class="navg-item"><i class="icon icon-heart"></i><b class="text">收藏</b></span>-->
                 </div>
                 <div class="tab-wrap">
+
                     <div class="tab-item manual-catalog">
                         <div class="catalog-list read-book-preview" id="sidebar">
                             {$tree|raw}
@@ -142,6 +148,32 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="projectTransfer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" method="get" action="{:url('document/show',['doc_id'=>$project->project_id])}" id="transferForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" name="doc_id" value="{$project->project_id}">
+                    <div class="form-group">
+                        <label for="password">搜索</label>
+                        <input type="text" class="form-control" name="keywords"  id="transferAccount" placeholder="标题" title="标题">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-success" data-loading-text="正在搜索...">搜索</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>

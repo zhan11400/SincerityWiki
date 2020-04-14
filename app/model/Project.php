@@ -134,21 +134,24 @@ class Project extends Model
      * @param int $selected_id
      * @return string
      */
-    public static function getProjectHtmlTree($project_id,$selected_id = 0)
+    public static function getProjectHtmlTree($project_id,$selected_id = 0,$keywords=null)
     {
         if(empty($project_id)){
             return '';
         }
         $tree = Document::where('project_id','=',$project_id)
             ->field('doc_id,doc_name,parent_id')
+            ->where(function ($query) use ($keywords){
+                if($keywords){
+                    $query->whereLike('doc_name','%'.$keywords.'%');
+                }
+            })
             ->order('doc_sort ASC')
             ->select()
             ->toArray();
-
         if(empty($tree) === false){
             $parent_id = self::getSelecdNode($tree,$selected_id);
-
-            return self::createTree(0,$tree,$selected_id,$parent_id);
+           return self::createTree(0,$tree,$selected_id,$parent_id,$keywords);
         }
         return '';
     }
@@ -163,25 +166,30 @@ class Project extends Model
         }
         return 0;
     }
-    protected static function createTree($parent_id,array $array,$selected_id = 0,$selected_parent_id = 0)
+    protected static function createTree($parent_id,array $array,$selected_id = 0,$selected_parent_id = 0,$keywords=null)
     {
         global $menu;
-
         $menu .= '<ul>';
-
         foreach ($array as $item){
-            if($item['parent_id'] == $parent_id) {
+            if($keywords){
                 $selected = $item['doc_id'] == $selected_id ? ' class="jstree-clicked"' : '';
                 $selected_li = $item['doc_id'] == $selected_parent_id ? ' class="jstree-open"' : '';
-
-                $menu .= '<li id="'.$item['doc_id'].'"'.$selected_li.'><a href="'. url('document/show',['doc_id'=> $item['doc_id']]) .'" title="' . htmlspecialchars($item['doc_name']) . '"'.$selected.'>' . $item['doc_name'] .'</a>';
-
-                $key = array_search($item['doc_id'], array_column($array, 'parent_id'));
-
-                if ($key !== false) {
-                    self::createTree($item['doc_id'], $array,$selected_id,$selected_parent_id);
-                }
+                $menu .= '<li id="' . $item['doc_id'] . '"' . $selected_li . '><a href="' . url('document/show', ['doc_id' => $item['doc_id']]) . '" title="' . htmlspecialchars($item['doc_name']) . '"' . $selected . '>' . $item['doc_name'] . '</a>';
                 $menu .= '</li>';
+            }else {
+                if ($item['parent_id'] == $parent_id) {
+                    $selected = $item['doc_id'] == $selected_id ? ' class="jstree-clicked"' : '';
+                    $selected_li = $item['doc_id'] == $selected_parent_id ? ' class="jstree-open"' : '';
+
+                    $menu .= '<li id="' . $item['doc_id'] . '"' . $selected_li . '><a href="' . url('document/show', ['doc_id' => $item['doc_id']]) . '" title="' . htmlspecialchars($item['doc_name']) . '"' . $selected . '>' . $item['doc_name'] . '</a>';
+
+                    $key = array_search($item['doc_id'], array_column($array, 'parent_id'));
+
+                    if ($key !== false) {
+                        self::createTree($item['doc_id'], $array, $selected_id, $selected_parent_id);
+                    }
+                    $menu .= '</li>';
+                }
             }
         }
         $menu .= '</ul>';
