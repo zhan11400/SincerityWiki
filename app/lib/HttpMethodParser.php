@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\lib;
+namespace app\lib;
 
 
 

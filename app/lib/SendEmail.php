@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\lib;
+namespace app\lib;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -9,30 +9,30 @@ use PHPMailer\PHPMailer\Exception;
 class SendEmail
 {
     public $error;
-    protected $config=[
-        'Host'=>'smtp.qq.com',
-        'Username'=>'542920634@qq.com',
-        'Password'=>'jkjxefnrukhibbch',
-    ];
-    public function send($tomail,$name,$subject = '',$body = '',$attachment = null){
+    public function send($config,$tomail,$name,$subject = '',$body = '',$attachment = null){
         $mail = new PHPMailer(true);
+        $config['EMAIL_HOST']='smtp.qq.com';
+        $config['EMAIL_USER']='542920634@qq.com';
+        $config['EMAIL_PASSWORD']='soxlvxiyskypbbgb';
+        $config['EMAIL_PORT']=25;
         try {
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
             $mail->isSMTP();                                            // 设定使用SMTP服务
-            $mail->Host       = $this->config['Host'];                    // Set the SMTP server to send through
+            $mail->Host       = $config['EMAIL_HOST'];                    // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = $this->config['Username'];              // SMTP username
-            $mail->Password   = $this->config['Password'];                     // SMTP password
+            $mail->Username   = $config['EMAIL_USER'];              // SMTP username
+            $mail->Password   = $config['EMAIL_PASSWORD'];                     // SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            $mail->Port       = 25;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+            $mail->Port       = $config['EMAIL_PORT'];                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
             //recipients 收件人
-            $mail->setFrom($this->config['Username'], 'Mailer');
+            $mail->setFrom($config['EMAIL_USER'], 'Mailer');
 
             $mail->addAddress($tomail, $name);     // Add a recipient// Name is optional
-            $mail->addReplyTo($this->config['Username'], 'susan');
+            $mail->addReplyTo($config['EMAIL_USER'], 'susan');
             // Content 内容
-            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->isHTML(true);
+
             $mail->Subject = $subject;
             $mail->Body    =$body;
             $mail->send();

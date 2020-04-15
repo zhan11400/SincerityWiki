@@ -21,10 +21,12 @@ class CreateEnv extends Command
     protected function execute(Input $input, Output $output)
     {
         $envPath = root_path() . '.env';
+        $message='File '.$envPath.' exist!';
         if(!file_exists($envPath)){
             @copy(root_path()  . '.example.env', root_path()  . '.env');
+            $message='create env success';
         }
     	// 指令输出
-    	$output->writeln('create env success');
+    	$output->writeln($message);
     }
 }

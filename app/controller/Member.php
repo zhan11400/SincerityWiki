@@ -20,12 +20,6 @@ class Member extends Common
     {
         parent::__construct($request);
         $this->data['action'] = request()->action();
-        $member = session('member');
-
-
-        if(!$member){
-
-        }
     }
 
     /**个人资料

@@ -71,7 +71,7 @@ class Account extends Common
     {
         if($this->request->isPost()){
             //如果没有启用邮件
-            if(!config('mail.enable')){
+            if(!$this->config['ENABLED_REGISTER']){
                 return show(40609,'没有启用邮件');
             }
             $post=input();
@@ -103,7 +103,7 @@ class Account extends Common
             $email= $post['email'];
             //
             $html=view('account/email',compact('url','email'))->getContent();
-            $result=(new SendEmail())->send($email,$email,'找回密码',$html);
+            $result=(new SendEmail())->send($this->config,$email,$email,'找回密码',$html);
             if($result) {
                 $passwords->send_time = date('Y-m-d H:i:s');
                 $passwords->save();

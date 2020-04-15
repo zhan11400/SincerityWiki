@@ -28,9 +28,9 @@ class Authenticate
             }
         }
         if(empty($member)){
-            if(stripos($uri,'/member')===false){
-                $url=url('account/login');
-             //   return redirect((string)$url);
+            if(stripos($uri,'/member')!==false){
+                $url=url('account/logout');
+               return redirect((string)$url);
             }
         }
         return $next($request);

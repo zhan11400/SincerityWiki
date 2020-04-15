@@ -58,15 +58,6 @@
                     <input name="SITE_NAME" id="SITE_NAME" value="{$SITE_NAME}" class="form-control ">
                 </div>
                 <div class="form-group">
-                    <label for="ENABLED_HISTORY">启用文档历史</label><br/>
-                    <label>
-                        <input type="radio" name="ENABLED_HISTORY" value="1" {$ENABLED_HISTORY==1?='checked'}>是
-                    </label>
-                    <label>
-                        <input type="radio" name="ENABLED_HISTORY" value="0" {$ENABLED_HISTORY==0?='checked'}>否
-                    </label>
-                </div>
-                <div class="form-group">
                     <label for="ENABLED_CAPTCHA">启用登录验证码</label><br/>
                     <label>
                         <input type="radio" name="ENABLED_CAPTCHA" value="1"  {$ENABLED_CAPTCHA==1?='checked'}>是
@@ -84,6 +75,23 @@
                         <input type="radio" name="ENABLED_REGISTER" value="0"  {$ENABLED_REGISTER==0 ?='checked'}>否
                     </label>
                 </div>
+                <div class="form-group">
+                    <label for="MAIL_TOKEN_TIME">简单邮件传输协议</label>
+                    <input class="form-control" name="EMAIL_HOST"  value="{$EMAIL_HOST}">
+                </div>
+                            <div class="form-group">
+                    <label for="MAIL_TOKEN_TIME">发送者邮箱</label>
+                    <input class="form-control" name="EMAIL_USER"  value="{$EMAIL_USER}">
+                </div>
+                <div class="form-group">
+                    <label for="MAIL_TOKEN_TIME">发送者邮箱授权码</label>
+                    <input class="form-control" name="EMAIL_PASSWORD"  value="{$EMAIL_PASSWORD}">
+                </div>
+                <div class="form-group">
+                    <label for="MAIL_TOKEN_TIME">端口</label>
+                    <input class="form-control" name="EMAIL_PORT"  value="{$EMAIL_PORT}">
+                </div>
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-success" data-loading-text="保存中...">立即保存</button>
                     <span id="error-message" style="vertical-align: baseline"></span>
