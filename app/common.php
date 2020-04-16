@@ -80,7 +80,7 @@ if(!function_exists('system_install')) {
                 $password = password_hash($password, PASSWORD_DEFAULT);
                 $headimgurl ='/static/images/middle.gif';
 
-                $sql = "INSERT INTO wk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) SELECT '{$account}','{$password}',0,'{$account}','{$email}',now(),0,'{$headimgurl}' FROM dual WHERE NOT exists(SELECT * FROM wk_member WHERE `account` = '{$account}');";
+                $sql = "INSERT INTO sk_member(account,member_passwd,group_level,nickname,email,create_time,state,headimgurl) SELECT '{$account}','{$password}',0,'{$account}','{$email}',now(),0,'{$headimgurl}' FROM dual WHERE NOT exists(SELECT * FROM sk_member WHERE `account` = '{$account}');";
 
                 $sth = $pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
 

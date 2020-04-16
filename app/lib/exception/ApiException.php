@@ -19,8 +19,8 @@ class ApiException extends Exception {
      * @param int $code
      */
     public function __construct($message = '', $code = 0, $httpCode = 0) {
-/*      $this->httpCode = $httpCode;
+     $this->httpCode = $httpCode;
         $this->message = $message;
-       $this->code = $code;*/
+       $this->code = $code;
     }
 }

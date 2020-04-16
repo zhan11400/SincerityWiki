@@ -14,7 +14,7 @@ class Install
      */
     public function handle($request, \Closure $next)
     {
-        /*$path = root_path().'install.lock';
+        $path = root_path().'install.lock';
         $server=$request->server();
         $uri = $server['REQUEST_URI'];
 
@@ -27,7 +27,7 @@ class Install
             $url ='/install.php';
 
             return redirect($url);
-        }*/
+        }
 
         return $next($request);
     }
