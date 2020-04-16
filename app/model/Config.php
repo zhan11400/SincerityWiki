@@ -23,6 +23,11 @@ class Config extends Model
 
         return $config ? $config->value : $default;
     }
+
+    /**
+     * @param bool $update
+     * @return array|bool|mixed
+     */
     public static function getConfigFromCache($update = false)
     {
         $cacheKey = 'config';

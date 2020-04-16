@@ -8,7 +8,13 @@ use think\Model;
 
 class Logs extends Model
 {
-
+    /**
+     * @param $content
+     * @param $user_id
+     * @param null $original_data
+     * @param null $present_data
+     * @return bool
+     */
     public static function addLogs($content,$user_id,$original_data = null,$present_data = null)
     {
         $logs = new Logs();

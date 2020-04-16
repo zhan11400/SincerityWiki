@@ -11,10 +11,6 @@ class SendEmail
     public $error;
     public function send($config,$tomail,$name,$subject = '',$body = '',$attachment = null){
         $mail = new PHPMailer(true);
-        $config['EMAIL_HOST']='smtp.qq.com';
-        $config['EMAIL_USER']='542920634@qq.com';
-        $config['EMAIL_PASSWORD']='soxlvxiyskypbbgb';
-        $config['EMAIL_PORT']=25;
         try {
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output

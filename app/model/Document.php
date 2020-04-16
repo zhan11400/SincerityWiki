@@ -51,11 +51,14 @@ class Document extends Model
         }
         return $html;
     }
-    /**
-     * 从缓存中获取指定的文档
+
+    /**从缓存中获取指定的文档
      * @param $doc_id
-     * @param bool $update 是否强制更新缓存
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|Document|Document[]
+     * @param bool $update
+     * @return array|bool|Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function getDocumentFromCache($doc_id,$update = false)
     {

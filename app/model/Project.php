@@ -86,12 +86,14 @@ class Project extends Model
         }
         return $project;
     }
-    /**
-     * 判断用户是否有查看指定文档权限
+    /**判断用户是否有查看指定文档权限
      * @param $project_id
-     * @param int|null $member_id
-     * @param string|null $passwd
+     * @param null $member_id
+     * @param null $passwd
      * @return int 0 项目不存在；1 有权限； 2 需要密码； 3 没有权限
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function hasProjectShow($project_id,$member_id = null,$passwd = null)
     {
@@ -128,11 +130,14 @@ class Project extends Model
     }
 
 
-    /**
-     * 获取项目的文档树Html结构
-     * @param int $project_id
+    /**获取项目的文档树Html结构
+     * @param $project_id
      * @param int $selected_id
+     * @param null $keywords
      * @return string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function getProjectHtmlTree($project_id,$selected_id = 0,$keywords=null)
     {
@@ -195,12 +200,14 @@ class Project extends Model
         $menu .= '</ul>';
         return $menu;
     }
+
     /**
      * 搜索项目
      * @param string $keyword 关键字
      * @param int $pageIndex
      * @param int $pageSize
      * @return bool|\Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @throws \think\db\exception\DbException
      */
     public static function search($keyword,$pageSize = 20, $memberId = null)
     {
@@ -235,20 +242,20 @@ class Project extends Model
                             ->orWhere('description', 'like', $keyword);
                     })
                     ->orderBy('project_id', 'DESC')
-                    ->paginate($pageSize, ['*'], 'page', $pageIndex)
+                    ->paginate($pageSize)
                     ->appends([
                         'keyword' => $keyword
                     ]);
             }
         }else {
-            $searchResult = DB::table('project')->select(['*'])
+            $searchResult = DB::name('project')
                 ->where('project_open_state', '<>', 0)
                 ->where(function ($query) use ($keyword) {
                     $query->where('project_name', 'like', $keyword)
                         ->orWhere('description', 'like', $keyword);
                 })
-                ->orderBy('project_id', 'DESC')
-                ->paginate($pageSize, ['*'], 'page', $pageIndex)
+                ->order('project_id', 'DESC')
+                ->paginate($pageSize)
                 ->appends([
                     'keyword' => $keyword
                 ]);
@@ -322,11 +329,13 @@ class Project extends Model
         return true;
     }
 
-    /**
-     * 判断是否是指定项目的拥有者
-     * @param int $project_id
-     * @param int $member_id
+    /**判断是否是指定项目的拥有者
+     * @param $project_id
+     * @param $member_id
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function isOwner($project_id,$member_id)
     {
@@ -384,11 +393,14 @@ class Project extends Model
             throw new \Exception($ex->getMessage(),500);
         }
     }
-    /**
-     * 删除项目以及项目相关的文档
+
+    /**删除项目以及项目相关的文档
      * @param $project_id
      * @return bool
-     * @throws DataNullException|ResultException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \Exception
      */
     public static function deleteProjectByProjectId($project_id)
     {
@@ -415,10 +427,12 @@ class Project extends Model
 
     }
 
-    /**
-     * 获取指定项目的参与用户列表
-     * @param int $project_id
-     * @return array|static[]
+    /**获取指定项目的参与用户列表
+     * @param $project_id
+     * @return \think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function getProjectMemberByProjectId($project_id)
     {
@@ -430,11 +444,14 @@ class Project extends Model
             ->select();
         return $query;
     }
-    /**
-     * 获取指定用户是否有指定文档编辑权限
-     * @param int $project_id
-     * @param int $member_id
+
+    /**获取指定用户是否有指定文档编辑权限
+     * @param $project_id
+     * @param $member_id
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function hasProjectEdit($project_id,$member_id)
     {
@@ -449,16 +466,19 @@ class Project extends Model
         }
         $project = DB::name('relationship')->alias('ship')
             ->field('pro.*')
-            ->leftJoin('project as pro','ship.project_id','=','pro.project_id')
+            ->leftJoin('project as pro','ship.project_id=pro.project_id')
             ->where('ship.member_id','=',$member_id)
             ->where('ship.project_id','=',$project_id)
             ->find();
         return empty($project) === false;
     }
-    /**
-     * 获取项目的文档树
-     * @param int $project_id
+
+    /**获取项目的文档树
+     * @param $project_id
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function getProjectArrayTree($project_id)
     {

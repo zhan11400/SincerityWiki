@@ -10,14 +10,16 @@ use think\Model;
 
 class Member extends Model
 {
-    /**
-     * 会员登录
-     * @param string $account
-     * @param string $password
-     * @param string|null $ip
-     * @param string|null $userAgent
-     * @return bool|Member
-     * @throws DataNullException
+    /**会员登录
+     * @param $account
+     * @param $password
+     * @param null $ip
+     * @param null $userAgent
+     * @return array|Model|null
+     * @throws ApiException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function login($account,$password,$ip = null, $userAgent = null)
     {
