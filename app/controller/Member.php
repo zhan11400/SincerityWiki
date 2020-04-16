@@ -2,17 +2,13 @@
 
 
 namespace app\controller;
-
-
-
 use app\model\Config;
 use app\model\Project;
 use app\Request;
 use  app\model\Member as MemberModel;
 use app\validate\ResetPassword;
 use app\validate\UpdateProfile;
-use think\db\Where;
-use think\helper\Str;
+
 
 class Member extends Common
 {

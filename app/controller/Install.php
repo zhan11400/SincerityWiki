@@ -5,9 +5,7 @@ namespace app\controller;
 
 
 use app\BaseController;
-use PDO;
-use think\facade\Db;
-use think\facade\Env;
+
 
 class Install extends BaseController
 {
@@ -18,31 +16,6 @@ class Install extends BaseController
      */
     public function next()
     {
-        $host=env('DATABASE_HOSTNAME');
-        $db=Env::get('DATABASE_DATABASE');
-        $user=Env::get('DATABASE_USERNAME');
-        $password=Env::get('DATABASE_PASSWORD');
-        $port=Env::get('DATABASE_HOSTPORT');
-        $dsn="mysql:host=$host;port=$port;";
-        try{
-            $pdo=new PDO($dsn,$user,$password);//初始化一个PDO对象，就是创建了数据库连接对象$pdo
-            echo '<pre>';
-            $query="SELECT * FROM information_schema.SCHEMATA where SCHEMA_NAME='".$db."';";
-            $res=$pdo->query($query);//执行添加语句并返回受影响行数
-            var_dump($res);
-            $SCHEMA_NAME='';
-            foreach($res as $val){
-                $SCHEMA_NAME=$val['SCHEMA_NAME'];
-            }
-            var_dump($SCHEMA_NAME);
-            exit;
-            $query="CREATE DATABASE if not exists `$db` CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';";//需要执行的sql语句
-            $res=$pdo->exec($query);//执行添加语句并返回受影响行数
-            var_dump($res);
-        }catch(\Exception $e) {
-        var_dump($e->getMessage());
-        }
-        exit;
         if($this->request->isPost()) {
             $dbHost = $this->request->param('dataAddress');
             $dbUser = $this->request->param('dataAccount');

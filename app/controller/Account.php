@@ -122,13 +122,9 @@ class Account extends Common
      */
     public function processResult()
     {
-        session('process',json_encode([
-            'message' => "<p>密码重置链接已经发到您邮箱</p><p><a>{114@qq.com}</a> </p><p>请登录您的邮箱并点击密码重置链接进行密码更改</p><p><b>还没收到确认邮件?</b> 尝试到广告邮件、垃圾邮件目录里找找看</p>",
-            'title' => '邮件发送成功'
-        ]));
         $data = json_decode(session('process'),true);
         if(empty($data)){
-            //return redirect(url('/'));
+            return redirect(url('/'));
         }
         Session::delete('process');
 

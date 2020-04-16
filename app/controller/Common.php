@@ -11,7 +11,6 @@ use app\model\Config;
 use app\middleware\Authenticate;
 use app\middleware\Install;
 use app\Request;
-use think\facade\Cache;
 use think\facade\View;
 
 class Common extends BaseController

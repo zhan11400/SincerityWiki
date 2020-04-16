@@ -31,4 +31,10 @@ return [
     'error_message'    => '页面错误！请稍后再试～',
     // 显示错误信息
     'show_error_msg'   => false,
+
+    'http_exception_template'    =>  [
+        // 还可以定义其它的HTTP status
+        404 => root_path() . 'view/error/404.html',
+        403 => root_path() . 'view/error/403.html',
+    ]
 ];

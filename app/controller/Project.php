@@ -7,53 +7,11 @@ use \app\model\Project as ProjectModel;
 use app\model\Relationship;
 use think\facade\Log;
 use \app\model\Member as MemberModel;
-use function GuzzleHttp\Psr7\str;
+
 
 class Project extends Member
 {
-    /**创建项目
-     * @return mixed
-     */
-    public function create()
-    {
-        //如果非管理员用户并且非普通用户则禁止创建项目
-        if($this->member->group_level != 0 && $this->member->group_level != 1){
-            abort(403);
-        }
 
-        $projectName = trim($this->request->input('projectName'));
-        $description = trim($this->request->input('description',null));
-        $isPasswd = $this->request->input('projectPasswd','1');
-        $passwd = trim($this->request->input('projectPasswdInput',null));
-
-        $project = new Project();
-        $project->project_name = $projectName;
-        $project->description = $description;
-        $project->project_open_state = $isPasswd;
-        $project->project_password = $passwd;
-        $project->create_at = $this->member_id;
-
-        try{
-            $project->addOrUpdate();
-
-        }catch (\Exception $ex){
-            if($ex->getCode() == 500){
-                return show(40205,null,$ex->getMessage());
-            }else{
-                return show($ex->getCode());
-            }
-        }
-        $this->data = $project->toArray();
-
-        $this->data['doc_count'] = 0;
-
-        $view = view('widget.project',$this->data);
-        $this->data = array();
-
-        $this->data['body'] = $view->render();
-
-        return show(20002,$this->data);
-    }
 
     /**删除项目
      * @param $id
@@ -209,7 +167,7 @@ class Project extends Member
      */
     public function members($id)
     {
-        $project_id = intval($id);
+         $project_id = intval($id);
 
         if(empty($project_id)){
             abort(404);
@@ -230,9 +188,6 @@ class Project extends Member
         $this->data['member'] = $this->member;
         $this->data['member_projects'] = true;
         $this->data['users'] = ProjectModel::getProjectMemberByProjectId($project_id);
-
-        $a= view('',$this->data)->getContent();
-
         return view('',$this->data);
     }
 
