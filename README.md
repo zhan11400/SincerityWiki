@@ -30,7 +30,7 @@ php think migrate:run
 php think seed:run
 ```
 6，操作完成后，后台登录账号密码为admin 123456
-#安装方式二
+##安装方式二
 1，从GitHub下载源码后，执行composer下载vendor
 
 2，部署好站点，默认跳转到安装页面，根据提示安装
